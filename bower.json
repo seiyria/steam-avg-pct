@@ -1,0 +1,14 @@
+{
+  "name": "steam-avg-pct",
+  "version": "0.0.0",
+  "authors": [
+    "Kyle Kemp <kyle@seiyria.com>"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "angular": "~1.4.3",
+    "lodash": "~3.10.0",
+    "angular-ui": "~0.4.0",
+    "angular-tablesort": "~1.0.8"
+  }
+}

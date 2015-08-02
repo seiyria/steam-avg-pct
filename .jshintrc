@@ -1,0 +1,28 @@
+{
+  "bitwise": true,
+  "laxcomma": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "forin": true,
+  "immed": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "nonew": false,
+  "quotmark": "single",
+  "esnext": true,
+  "undef": true,
+  "unused": true,
+  "devel": true,
+  "trailing": true,
+  "browser": true,
+  "sub": true,
+  "strict": false,
+  "debug": true,
+  "globals": {
+    "_": false,
+    "Phaser": false
+  }
+}
