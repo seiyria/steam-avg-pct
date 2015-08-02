@@ -9,5 +9,26 @@ html(lang="en", ng-app="SteamAvgPct", ng-controller="MainCtrl")
         link(href="css/main.min.css", rel="stylesheet")
 
     body
+
+        nav.navbar.navbar-default
+            .container-fluid
+                .navbar-header
+                    a.navbar-brand Steam Avg. Percent
+
+                .collapse.navbar-collapse
+                    ui.nav.navbar-nav
+                        li
+                            a(href) Credentials
+                    form.navbar-form.navbar-left
+                        button.btn.btn-primary(ng-click="go()") Go
+
+        .container
+            .row
+                .col-md-3
+                    input.form-control(ng-model="dataStore.steamId", placeholder="Steam ID or vanity URL")
+                .col-md-3
+                    input.form-control(ng-model="dataStore.apiKey", placeholder="API Key")
+
+
         script(src="js/lib.js")
         script(src="js/main.min.js")

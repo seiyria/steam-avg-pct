@@ -9,6 +9,7 @@
     "angular": "~1.4.3",
     "lodash": "~3.10.0",
     "angular-tablesort": "~1.0.8",
-    "angular-ui-bootstrap-bower": "~0.13.2"
+    "angular-ui-bootstrap-bower": "~0.13.2",
+    "ngstorage": "~0.3.7"
   }
 }

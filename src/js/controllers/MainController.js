@@ -1,4 +1,5 @@
 
-module.exports = ($scope) => {
-    $scope.test = 1;
+module.exports = ($scope, $localStorage, ProcessAllData) => {
+    $scope.dataStore = $localStorage;
+    $scope.go = ProcessAllData.go;
 };

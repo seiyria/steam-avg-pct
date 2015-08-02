@@ -116,7 +116,7 @@ gulp.task('eslint', function() {
   var paths = getPaths();
 
   var cfg = eslintCfg;
-  cfg.globals = ['angular'];
+  cfg.globals = ['angular', '_'];
   cfg.envs = ['es6'];
 
   return gulp.src(paths.js)
