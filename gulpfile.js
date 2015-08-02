@@ -4,8 +4,6 @@ var del = require('del');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var minifycss = require('gulp-minify-css');
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
 var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 var less = require('gulp-less');
@@ -24,6 +22,9 @@ var ghPages = require('gulp-gh-pages');
 var bump = require('gulp-bump');
 var tagVersion = require('gulp-tag-version');
 var filter = require('gulp-filter');
+var ngAnnotate = require('gulp-ng-annotate');
+var eslint = require('gulp-eslint');
+var eslintCfg = require('eslint-config-kellyirc');
 
 var fs = require('fs');
 
@@ -79,7 +80,7 @@ gulp.task('copylibjs', ['clean'], function () {
     .on('error', gutil.log);
 });
 
-gulp.task('compilejs', ['jscs', 'jshint', 'clean'], function () {
+gulp.task('compilejs', ['eslint', 'clean'], function () {
   var paths = getPaths();
 
   var bundler = browserify({
@@ -98,6 +99,7 @@ gulp.task('compilejs', ['jscs', 'jshint', 'clean'], function () {
       .bundle()
       .pipe(source('js/main.min.js'))
       .pipe(gulpif(!watching, streamify(uglify({outSourceMaps: false}))))
+      .pipe(ngAnnotate())
       .pipe(gulp.dest(paths.dist))
       .on('error', gutil.log);
   };
@@ -110,24 +112,17 @@ gulp.task('compilejs', ['jscs', 'jshint', 'clean'], function () {
   return bundlee();
 });
 
-gulp.task('jshint', function() {
+gulp.task('eslint', function() {
   var paths = getPaths();
 
-  return gulp.src(paths.js)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
-    .on('error', gutil.log);
-});
-
-gulp.task('jscs', function() {
-  var paths = getPaths();
+  var cfg = eslintCfg;
+  cfg.globals = ['angular'];
+  cfg.envs = ['es6'];
 
   return gulp.src(paths.js)
-    .pipe(jscs({
-      fix: true,
-      esnext: true
-    }))
-    .on('error', gutil.log);
+    .pipe(eslint(cfg))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
 });
 
 gulp.task('compileless', ['clean'], function () {
@@ -176,7 +171,7 @@ gulp.task('connect', function () {
 gulp.task('open', function() {
   gulp.src('./dist/index.html')
     .pipe(gopen('', {
-      url: 'http://localhost:8000'
+      url: 'http://127.0.0.1:8000'
     }));
 });
 
