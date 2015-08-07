@@ -16,18 +16,73 @@ html(lang="en", ng-app="SteamAvgPct", ng-controller="MainCtrl")
                     a.navbar-brand Steam Avg. Percent
 
                 .collapse.navbar-collapse
-                    ui.nav.navbar-nav
-                        li
-                            a(href) Credentials
                     form.navbar-form.navbar-left
-                        button.btn.btn-primary(ng-click="go()") Go
+                        .form-group
+                            input.form-control(ng-model="dataStore.username", placeholder="Steam ID or vanity URL")
+                        button.btn.btn-primary(ng-click="go()", ng-disabled="loading") Go
 
         .container
-            .row
-                .col-md-3
-                    input.form-control(ng-model="dataStore.steamId", placeholder="Steam ID or vanity URL")
-                .col-md-3
-                    input.form-control(ng-model="dataStore.apiKey", placeholder="API Key")
+            .row(ng-if="errorState")
+                .col-md-12
+                    .alert.alert-danger Error! Either that vanity name or url does not exist, your profile is not public, or you have no games.
+
+            .row(ng-if="!allGames.length && !loading")
+                .col-md-12
+                    .alert.alert-info To get started, put in your steam vanity url or 64bit id in the box above and hit "Go".
+
+            .row(ng-if="loading && !errorState")
+                .col-md-12
+                    .alert.alert-info Loading your data...
+
+            .row(ng-if="allGames.length")
+                .col-md-12
+                    h1.text-center Avg. Completion Rate: {{avgPct | number:0}}%
+
+            .row(ng-if="allGames.length")
+                .col-md-12
+
+            .row(ng-if="allGames.length")
+                .col-md-12
+                    table.table.table-striped(st-table="games", st-safe-src="allGames", st-set-filter="TableFilter")
+                        thead
+                        tr
+                        td(colspan="5")
+                            .well
+                                .row
+                                    .col-md-2
+                                        span {{allGames.length}} games
+                                    .col-md-2
+                                        check-filter(predicate="below", checked="true")
+                                        span Show below avg.
+                                    .col-md-2
+                                        check-filter(predicate="above", checked="true")
+                                        span Show above avg.
+                                    .col-md-2
+                                        check-filter(predicate="complete", checked="true")
+                                        span Show complete
+                        tr
+                            th(width="50")
+                            th(width="60%", st-sort="name") Name
+                            th(width="10%", st-sort="earned") Earned
+                            th(width="10%", st-sort="max") Maximum
+                            th(width="15%", st-sort="percent") % Completion
+
+                        tbody
+                        tr(ng-repeat="game in games")
+                            td
+                                img(ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.icon}}.jpg")
+                            td {{game.name}}
+                            td {{game.earned}}
+                            td {{game.max}}
+                            td {{game.percent | number:2}}%
+
+                        tr(ng-if="games.length === 0")
+                            td.text-center(colspan="5") No games match your filter criteria.
+
+                        tfoot
+                        tr
+                            td.text-center(colspan="5")
+                                div(st-pagination, st-items-by-page="10", st-displayed-pages="7")
 
 
         script(src="js/lib.js")
