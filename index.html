@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SteamAvgPct" ng-controller="MainCtrl">
+  <head>
+    <meta charset="utf-8">
+    <title>Steam Avg. Percent</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/lib.css" rel="stylesheet">
+    <link href="css/main.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header"><a class="navbar-brand">Steam Avg. Percent</a></div>
+        <div class="collapse navbar-collapse">
+          <form class="navbar-form navbar-left">
+            <div class="form-group">
+              <input ng-model="dataStore.username" placeholder="Steam ID or vanity URL" class="form-control">
+            </div>
+            <button ng-click="go()" ng-disabled="loading" class="btn btn-primary">Go</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div ng-if="errorState" class="row">
+        <div class="col-md-12">
+          <div class="alert alert-danger">Error! Either that vanity name or url does not exist, your profile is not public, or you have no games.</div>
+        </div>
+      </div>
+      <div ng-if="!allGames.length &amp;&amp; !loading" class="row">
+        <div class="col-md-12">
+          <div class="alert alert-info">To get started, put in your steam vanity url or 64bit id in the box above and hit "Go".</div>
+        </div>
+      </div>
+      <div ng-if="loading &amp;&amp; !errorState" class="row">
+        <div class="col-md-12">
+          <div class="alert alert-info">Loading your data...</div>
+        </div>
+      </div>
+      <div ng-if="allGames.length" class="row">
+        <div class="col-md-12">
+          <h1 class="text-center">Avg. Completion Rate: {{avgPct | number:0}}%</h1>
+        </div>
+      </div>
+      <div ng-if="allGames.length" class="row">
+        <div class="col-md-12"></div>
+      </div>
+      <div ng-if="allGames.length" class="row">
+        <div class="col-md-12">
+          <table st-table="games" st-safe-src="allGames" st-set-filter="TableFilter" class="table table-striped">
+            <thead></thead>
+            <tr></tr>
+            <td colspan="5">
+              <div class="well">
+                <div class="row">
+                  <div class="col-md-2"><span>{{allGames.length}} games</span></div>
+                  <div class="col-md-2">
+                    <check-filter predicate="below" checked="true"></check-filter><span>Show below avg.</span>
+                  </div>
+                  <div class="col-md-2">
+                    <check-filter predicate="above" checked="true"></check-filter><span>Show above avg.</span>
+                  </div>
+                  <div class="col-md-2">
+                    <check-filter predicate="complete" checked="true"></check-filter><span>Show complete</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <tr>
+              <th width="50"></th>
+              <th width="60%" st-sort="name">Name</th>
+              <th width="10%" st-sort="earned">Earned</th>
+              <th width="10%" st-sort="max">Maximum</th>
+              <th width="15%" st-sort="percent">% Completion</th>
+            </tr>
+            <tbody></tbody>
+            <tr ng-repeat="game in games">
+              <td><img ng-src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.icon}}.jpg"></td>
+              <td>{{game.name}}</td>
+              <td>{{game.earned}}</td>
+              <td>{{game.max}}</td>
+              <td>{{game.percent | number:2}}%</td>
+            </tr>
+            <tr ng-if="games.length === 0">
+              <td colspan="5" class="text-center">No games match your filter criteria.</td>
+            </tr>
+            <tfoot></tfoot>
+            <tr>
+              <td colspan="5" class="text-center">
+                <div st-pagination st-items-by-page="10" st-displayed-pages="7"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="js/lib.js"></script>
+    <script src="js/main.min.js"></script>
+  </body>
+</html>
